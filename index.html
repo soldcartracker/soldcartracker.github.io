@@ -30,6 +30,13 @@
       </div>
 
       <div class="filter-group">
+        <div class="filter-header">Location</div>
+        <div class="filter-options" id="filter-location">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="filter-group">
         <div class="filter-header">Year</div>
         <div class="filter-options">
           <label>Min: <input type="number" id="year-min" placeholder="Min Year"></label>
@@ -40,29 +47,29 @@
       <div class="filter-group">
         <div class="filter-header">Make</div>
         <div class="filter-options" id="filter-make">
-          <!-- populated dynamically -->
+          <!-- Dynamically populated -->
         </div>
       </div>
 
       <div class="filter-group">
         <div class="filter-header">Model</div>
         <div class="filter-options" id="filter-model">
-          <!-- populated based on Make -->
+          <!-- Populated after Make selection -->
         </div>
       </div>
 
       <div class="filter-group">
         <div class="filter-header">Body Type</div>
         <div class="filter-options" id="filter-body">
-          <!-- populated dynamically -->
+          <!-- Dynamically populated -->
         </div>
       </div>
 
       <div class="filter-group">
         <div class="filter-header">Transmission</div>
         <div class="filter-options">
-          <label><input type="checkbox" id="trans-auto"> Automatic</label>
-          <label><input type="checkbox" id="trans-manual"> Manual</label>
+          <label><input type="checkbox" id="trans-auto" value="Automatic"> Automatic</label>
+          <label><input type="checkbox" id="trans-manual" value="Manual"> Manual</label>
         </div>
       </div>
 
@@ -85,14 +92,7 @@
       <div class="filter-group">
         <div class="filter-header">Fuel Type</div>
         <div class="filter-options" id="filter-fuel">
-          <!-- populated dynamically -->
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-header">Location</div>
-        <div class="filter-options" id="filter-location">
-          <!-- populated dynamically -->
+          <!-- Dynamically populated -->
         </div>
       </div>
     </aside>
@@ -121,16 +121,6 @@
       <button id="load-more" style="display:none;">Load More</button>
     </section>
   </main>
-
-  <!-- Image Gallery Modal -->
-  <div id="image-modal" class="modal">
-    <span class="modal-close">&times;</span>
-    <div class="modal-content">
-      <button id="prev-btn" class="modal-nav">&#10094;</button>
-      <img id="modal-img" src="" alt="Car Image">
-      <button id="next-btn" class="modal-nav">&#10095;</button>
-    </div>
-  </div>
 
   <script src="script.js" defer></script>
 </body>
