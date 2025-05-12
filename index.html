@@ -1,61 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sold Car Tracker – Coming Soon</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
-      text-align: center;
-      padding: 80px 20px;
-    }
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 1.3rem;
-      margin-bottom: 30px;
-    }
-
-    .construction-icon {
-      font-size: 80px;
-      margin-bottom: 30px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    a {
-      color: #ffd700;
-      text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 2rem; }
-      .construction-icon { font-size: 60px; }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sold Car Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="construction-icon">🚧</div>
+  <header>
     <h1>Sold Car Tracker</h1>
-    <p>This website is still under construction.</p>
-    <p>We're working hard to bring you real-time insights into vehicle sale prices.</p>
-    <p>Stay tuned!</p>
-    <p><a href="mailto:77nimesh@gmail.com">Contact Us</a> for early access or updates.</p>
+    <div class="sort-controls">
+      <label for="sortField">Sort by:</label>
+      <select id="sortField">
+        <option value="price">Price</option>
+        <option value="year">Year</option>
+        <option value="Indicated Odometer Reading">Mileage</option>
+        <option value="Fuel Type">Fuel Type</option>
+        <option value="bids">Bids</option>
+      </select>
+      <button id="sortOrderToggle">↑</button>
+    </div>
+  </header>
+  <div class="content-area">
+    <aside class="sidebar">
+      <h2>Filters</h2>
+      <div id="filter-year" class="filter-group"></div>
+      <div id="filter-make" class="filter-group"></div>
+      <div id="filter-model" class="filter-group"></div>
+      <div id="filter-body" class="filter-group"></div>
+      <div id="filter-fuel" class="filter-group"></div>
+      <div id="filter-location" class="filter-group"></div>
+      <div id="filter-mileage" class="filter-group"></div>
+      <button id="resetFilters">Reset Filters</button>
+    </aside>
+    <main>
+      <table id="car-table">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Variant</th>
+            <th>Body</th>
+            <th>Fuel</th>
+            <th>Mileage</th>
+            <th>Date</th>
+            <th>Price</th>
+            <th>Location</th>
+            <th>Bids</th>
+            <th>View</th>
+          </tr>          
+        </thead>
+        <tbody id="car-list"></tbody>
+      </table>
+    </main>
   </div>
+  <div id="load-more-trigger"></div>
+  <button id="backToTop">↑ Top</button>
+  <script src="script.js"></script>
 </body>
 </html>
