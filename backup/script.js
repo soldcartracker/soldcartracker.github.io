@@ -68,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2) Build and wire up all filter controls
   function initFilters() {
+
+    document.querySelectorAll('.filter-group')
+          .forEach(g => g.classList.add('collapsed'));
+          
     // Collect sets
     const locSet   = new Set(),
           bodySet  = new Set(),
