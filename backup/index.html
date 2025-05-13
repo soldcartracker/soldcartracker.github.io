@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sold Car Tracker - Dark Theme</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Sold Car Tracker</h1>
+  </header>
+
+  <main>
+    <aside class="filter-panel">
+      <div class="filter-group">
+        <div class="filter-header">Categories</div>
+        <div class="filter-options">
+          <label><input type="checkbox" id="category-vehicle"> Motor Vehicles</label>
+          <label><input type="checkbox" id="category-motorcycle"> Motorcycles</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Price</div>
+        <div class="filter-options">
+          <label>Min: <input type="number" id="price-min" placeholder="Min Price"></label>
+          <label>Max: <input type="number" id="price-max" placeholder="Max Price"></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Location</div>
+        <div class="filter-options" id="filter-location">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Year</div>
+        <div class="filter-options">
+          <label>Min: <input type="number" id="year-min" placeholder="Min Year"></label>
+          <label>Max: <input type="number" id="year-max" placeholder="Max Year"></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Make</div>
+        <div class="filter-options" id="filter-make">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Model</div>
+        <div class="filter-options" id="filter-model">
+          <!-- Populated after Make selection -->
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Body Type</div>
+        <div class="filter-options" id="filter-body">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Transmission</div>
+        <div class="filter-options">
+          <label><input type="checkbox" id="trans-auto" value="Automatic"> Automatic</label>
+          <label><input type="checkbox" id="trans-manual" value="Manual"> Manual</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Odometer</div>
+        <div class="filter-options">
+          <label>Min: <input type="number" id="odom-min" placeholder="Min km"></label>
+          <label>Max: <input type="number" id="odom-max" placeholder="Max km"></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Engine Capacity</div>
+        <div class="filter-options">
+          <label>Min: <input type="number" step="0.1" id="engine-min" placeholder="Min L"></label>
+          <label>Max: <input type="number" step="0.1" id="engine-max" placeholder="Max L"></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-header">Fuel Type</div>
+        <div class="filter-options" id="filter-fuel">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </aside>
+
+    <section class="results-section">
+      <div id="loading">Loading car data...</div>
+      <table id="results-table" style="display:none;">
+        <thead>
+          <tr>
+            <th data-key="year">Year</th>
+            <th data-key="brand">Make</th>
+            <th data-key="model">Model</th>
+            <th data-key="variant">Variant</th>
+            <th data-key="body">Body</th>
+            <th data-key="location">Location</th>
+            <th data-key="odometer">Odometer</th>
+            <th data-key="date">Date</th>
+            <th data-key="price">Price ($)</th>
+            <th data-key="bids">Bids</th>
+            <th>View</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="no-results" style="display:none;">No results found.</div>
+      <button id="load-more" style="display:none;">Load More</button>
+    </section>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+/* Dark Theme Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+  }
+  
+  header h1 {
+    margin: 0;
+    padding: 1rem;
+    background: #1e1e1e;
+    color: #ffffff;
+    font-size: 1.5rem;
+  }
+  
+  main {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .filter-panel {
+    width: 280px;
+    background: #181818;
+    padding: 10px;
+    box-sizing: border-box;
+    border-right: 1px solid #333;
+  }
+  
+  .filter-group {
+    margin-bottom: 15px;
+  }
+  
+  .filter-header {
+    background: #2c2c2c;
+    color: #cccccc;
+    font-weight: bold;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .filter-header::after {
+    content: "▼";
+    position: absolute;
+    right: 10px;
+  }
+  
+  .filter-group.collapsed .filter-header::after {
+    content: "▶";
+  }
+  
+  /* <-- This hides options when collapsed --> */
+  .filter-group.collapsed .filter-options {
+    display: none;
+  }
+  
+  .filter-options {
+    padding: 8px;
+  }
+  
+  .filter-options label {
+    display: block;
+    margin: 4px 0;
+  }
+  
+  input[type="checkbox"], input[type="radio"] {
+    accent-color: #00bfa5;
+  }
+  
+  .filter-options input[type="number"] {
+    width: 100px;
+    margin: 2px 0;
+    background: #333;
+    border: 1px solid #555;
+    border-radius: 3px;
+    padding: 2px 4px;
+    color: #e0e0e0;
+  }
+  
+  .filter-options input[type="number"]::placeholder {
+    color: #999;
+  }
+  
+  .results-section {
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  #loading {
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 1.1rem;
+    padding: 20px 0;
+  }
+  
+  #no-results {
+    text-align: center;
+    color: #f44336;
+    font-size: 1.1rem;
+    margin: 10px 0;
+  }
+  
+  #results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  
+  #results-table thead th {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    text-align: left;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  #results-table tbody td {
+    padding: 8px;
+    border-bottom: 1px solid #333;
+  }
+  
+  #results-table tbody tr:nth-child(even) {
+    background: #1a1a1a;
+  }
+  
+  #results-table tbody tr:nth-child(odd) {
+    background: #222;
+  }
+  
+  #results-table tbody tr:hover {
+    background: #333;
+  }
+  
+  #results-table th.sorted-asc::after {
+    content: " ▲";
+  }
+  
+  #results-table th.sorted-desc::after {
+    content: " ▼";
+  }
+  
+  /* Align date, bids, and view columns to center */
+  #results-table th:nth-child(8),
+  #results-table td:nth-child(8),
+  #results-table th:nth-child(10),
+  #results-table td:nth-child(10),
+  #results-table th:nth-child(11),
+  #results-table td:nth-child(11) {
+    text-align: center;
+  }
+  
+  #results-table td:nth-child(7),
+  #results-table th:nth-child(7),
+  #results-table td:nth-child(9),
+  #results-table th:nth-child(9) {
+    text-align: right;
+  }
+  
+  #load-more {
+    background: #00bfa5;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  #load-more:hover {
+    background: #009e8e;
+  }
+  
+  @media (max-width: 768px) {
+    main {
+      flex-direction: column;
+    }
+    .filter-panel {
+      width: auto;
+    }
+  }
+  
