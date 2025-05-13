@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const pageSize = 20;
+  const pageSize = 60;
   let allCars = [], currentData = [], displayCount = 0;
   let currentSortKey = null, currentSortDir = 'asc';
 
@@ -63,6 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Build filters and wire events
   function initFilters() {
+
+    document.querySelectorAll('.filter-group')
+          .forEach(g => g.classList.add('collapsed'));
+
+
     const locSet = new Set(), bodySet = new Set(),
           brandSet = new Set(), fuelSet = new Set(),
           modelsByBrand = {};

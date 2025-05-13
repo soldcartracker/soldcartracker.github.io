@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://soldcartracker.github.io/sitemap.xml

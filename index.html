@@ -3,12 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sold Car Tracker - Dark Theme</title>
+  <title>Sold Car Tracker Australia – Used Car Auction Prices &amp; History</title>
+  <meta name="description" content="Sold Car Tracker Australia provides free access to historical auction data and sold car listings. Search past sale prices by make, model, year, and location.">
+  <meta name="keywords" content="used car prices, sold car listings, vehicle auction history, past sale price, car sale history, Grays auctions, used car auction, vehicle price lookup, car auction data, used vehicle sale">
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Sold Car Tracker Australia – Used Car Auction Prices &amp; History">
+  <meta property="og:description" content="Track historical auction sale prices and sold listings for used cars in Australia by make, model, year, and location.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://soldcartracker.github.io/">
+  <meta property="og:image" content="https://soldcartracker.github.io/sold.png">
+  <meta property="og:site_name" content="Sold Car Tracker Australia">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sold Car Tracker Australia – Used Car Auction Prices &amp; History">
+  <meta name="twitter:description" content="Track historical auction sale prices and sold listings for used cars in Australia by make, model, year, and location.">
+  <meta name="twitter:image" content="https://soldcartracker.github.io/sold.png">
 </head>
+  
 <body>
   <header>
-    <h1>Sold Car Tracker</h1>
+    <h1>Sold Car Tracker Australia</h1>
+    <h4>Sold Car Tracker Australia provides free access to historical auction data and sold car listings. Search past sale prices by make, model, year, and location.</h4>
+    <p>This website provides access to unprocessed raw data extracted from vehicles listed for sale at Grays auctions.</p>
   </header>
 
   <main>
@@ -33,9 +52,13 @@
         <div class="filter-options" id="filter-location"></div>
       </div>
       <div class="filter-group">
-        <div class="filter-header">Body Type</div>
-        <div class="filter-options" id="filter-body"></div>
+        <div class="filter-header">Year</div>
+        <div class="filter-options">
+          <label>Min: <input type="number" id="year-min" placeholder="Min Year"></label>
+          <label>Max: <input type="number" id="year-max" placeholder="Max Year"></label>
+        </div>
       </div>
+      
       <div class="filter-group">
         <div class="filter-header">Make</div>
         <div class="filter-options" id="filter-make"></div>
@@ -44,19 +67,17 @@
         <div class="filter-header">Model</div>
         <div class="filter-options" id="filter-model"></div>
       </div>
-      <div class="filter-group">
-        <div class="filter-header">Year</div>
-        <div class="filter-options">
-          <label>Min: <input type="number" id="year-min" placeholder="Min Year"></label>
-          <label>Max: <input type="number" id="year-max" placeholder="Max Year"></label>
-        </div>
-      </div>
+      
       <div class="filter-group">
         <div class="filter-header">Transmission</div>
         <div class="filter-options">
           <label><input type="checkbox" id="trans-auto"> Automatic</label>
           <label><input type="checkbox" id="trans-manual"> Manual</label>
         </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-header">Body Type</div>
+        <div class="filter-options" id="filter-body"></div>
       </div>
       <div class="filter-group">
         <div class="filter-header">Odometer</div>
