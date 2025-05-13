@@ -13,6 +13,7 @@
 
   <main>
     <aside class="filter-panel">
+      <!-- (same filter-panel markup as before) -->
       <div class="filter-group">
         <div class="filter-header">Categories</div>
         <div class="filter-options">
@@ -20,7 +21,6 @@
           <label><input type="checkbox" id="category-motorcycle"> Motorcycles</label>
         </div>
       </div>
-
       <div class="filter-group">
         <div class="filter-header">Price</div>
         <div class="filter-options">
@@ -28,14 +28,22 @@
           <label>Max: <input type="number" id="price-max" placeholder="Max Price"></label>
         </div>
       </div>
-
       <div class="filter-group">
         <div class="filter-header">Location</div>
-        <div class="filter-options" id="filter-location">
-          <!-- Dynamically populated -->
-        </div>
+        <div class="filter-options" id="filter-location"></div>
       </div>
-
+      <div class="filter-group">
+        <div class="filter-header">Body Type</div>
+        <div class="filter-options" id="filter-body"></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-header">Make</div>
+        <div class="filter-options" id="filter-make"></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-header">Model</div>
+        <div class="filter-options" id="filter-model"></div>
+      </div>
       <div class="filter-group">
         <div class="filter-header">Year</div>
         <div class="filter-options">
@@ -43,36 +51,13 @@
           <label>Max: <input type="number" id="year-max" placeholder="Max Year"></label>
         </div>
       </div>
-
-      <div class="filter-group">
-        <div class="filter-header">Make</div>
-        <div class="filter-options" id="filter-make">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-header">Model</div>
-        <div class="filter-options" id="filter-model">
-          <!-- Populated after Make selection -->
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <div class="filter-header">Body Type</div>
-        <div class="filter-options" id="filter-body">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-
       <div class="filter-group">
         <div class="filter-header">Transmission</div>
         <div class="filter-options">
-          <label><input type="checkbox" id="trans-auto" value="Automatic"> Automatic</label>
-          <label><input type="checkbox" id="trans-manual" value="Manual"> Manual</label>
+          <label><input type="checkbox" id="trans-auto"> Automatic</label>
+          <label><input type="checkbox" id="trans-manual"> Manual</label>
         </div>
       </div>
-
       <div class="filter-group">
         <div class="filter-header">Odometer</div>
         <div class="filter-options">
@@ -80,7 +65,6 @@
           <label>Max: <input type="number" id="odom-max" placeholder="Max km"></label>
         </div>
       </div>
-
       <div class="filter-group">
         <div class="filter-header">Engine Capacity</div>
         <div class="filter-options">
@@ -88,12 +72,9 @@
           <label>Max: <input type="number" step="0.1" id="engine-max" placeholder="Max L"></label>
         </div>
       </div>
-
       <div class="filter-group">
         <div class="filter-header">Fuel Type</div>
-        <div class="filter-options" id="filter-fuel">
-          <!-- Dynamically populated -->
-        </div>
+        <div class="filter-options" id="filter-fuel"></div>
       </div>
     </aside>
 
@@ -121,6 +102,16 @@
       <button id="load-more" style="display:none;">Load More</button>
     </section>
   </main>
+
+  <!-- Image Gallery Modal -->
+  <div id="image-modal" class="modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-content">
+      <button id="prev-btn" class="modal-nav">&#10094;</button>
+      <img id="modal-img" src="" alt="Car Image">
+      <button id="next-btn" class="modal-nav">&#10095;</button>
+    </div>
+  </div>
 
   <script src="script.js" defer></script>
 </body>

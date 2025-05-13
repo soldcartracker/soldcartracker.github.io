@@ -1,12 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const pageSize = 100;
-  let allCars = [];
-  let currentData = [];
-  let displayCount = 0;
-  let currentSortKey = null;
-  let currentSortDir = 'asc';
+  const pageSize = 20;
+  let allCars = [], currentData = [], displayCount = 0;
+  let currentSortKey = null, currentSortDir = 'asc';
 
-  // 1) Fetch newline-delimited JSON
+  // 1. Load and parse newline-delimited JSON
   fetch('JSON_data/sold_cars.json')
     .then(res => res.text())
     .then(text => {
@@ -15,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const obj = JSON.parse(line);
           const car = {};
 
-          // Combine “Make + Model” into brand for a few edge cases
+          // Combine a few edge-case make+model into brand
           if ((obj.make === 'Mercedes' && obj.model === 'Benz') ||
               (obj.make === 'Land'     && obj.model === 'Rover') ||
               (obj.make === 'Alfa'     && obj.model === 'Romeo') ||
@@ -25,33 +22,32 @@ document.addEventListener('DOMContentLoaded', () => {
             car.brand = obj.make;
           }
 
-          car.make = obj.make;
-          car.model = obj.model;
-          car.variant = obj.variant || '';
-          car.body = obj['Body Type'] === '?' ? '' : obj['Body Type'];
-          car.location = obj.Location === '?' ? '' : obj.Location;
-          car.year = obj.year || 0;
+          car.make         = obj.make;
+          car.model        = obj.model;
+          car.variant      = obj.variant || '';
+          car.body         = obj['Body Type'] === '?' ? '' : obj['Body Type'];
+          car.location     = obj.Location === '?' ? '' : obj.Location;
+          car.year         = obj.year || 0;
 
           let odo = obj['Indicated Odometer Reading'];
           if (typeof odo === 'string') odo = odo.replace(/,/g, '');
-          car.odometer = parseInt(odo) || 0;
+          car.odometer     = parseInt(odo, 10) || 0;
 
-          car.date = obj.date || '';
-          car.bids = obj.bids || 0;
+          car.date         = obj.date || '';
+          car.bids         = obj.bids || 0;
 
           let eng = obj['Engine Capacity'];
           if (typeof eng === 'string') eng = (eng === '?' ? '' : eng);
-          car.engine = parseFloat(eng) || 0;
+          car.engine       = parseFloat(eng) || 0;
 
-          car.fuel = obj['Fuel Type'] === '?' ? '' : obj['Fuel Type'];
+          car.fuel         = obj['Fuel Type'] === '?' ? '' : obj['Fuel Type'];
           car.transmission = obj.Transmission ? obj.Transmission.toLowerCase() : '';
-          car.price = obj.price || 0;
+          car.price        = obj.price || 0;
 
-          // Category for sidebar
           const v = (obj.variant || '').toLowerCase();
-          car.category = v.includes('motorcycle') ? 'Motorcycle' : 'Vehicle';
+          car.category     = v.includes('motorcycle') ? 'Motorcycle' : 'Vehicle';
 
-          car.url = obj.url || '#';
+          car.url          = obj.url || '#';
           allCars.push(car);
         } catch (e) {
           console.error('JSON parse error:', e);
@@ -62,22 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
       updateResults();
       document.getElementById('loading').style.display = 'none';
       document.getElementById('results-table').style.display = 'table';
-      document.getElementById('load-more').style.display =
-        displayCount < currentData.length ? 'block' : 'none';
+      document.getElementById('load-more').style.display = displayCount < currentData.length ? 'block' : 'none';
     });
 
-  // 2) Build and wire up all filter controls
+  // 2. Build filters and wire events
   function initFilters() {
-    // Collect sets
-    const locSet   = new Set(),
-          bodySet  = new Set(),
-          brandSet = new Set(),
-          fuelSet  = new Set(),
+    const locSet = new Set(), bodySet = new Set(),
+          brandSet = new Set(), fuelSet = new Set(),
           modelsByBrand = {};
 
     allCars.forEach(c => {
-      if (c.location)   locSet.add(c.location);
-      if (c.body)       bodySet.add(c.body);
+      if (c.location) locSet.add(c.location);
+      if (c.body)     bodySet.add(c.body);
       if (c.brand) {
         brandSet.add(c.brand);
         modelsByBrand[c.brand] = modelsByBrand[c.brand] || new Set();
@@ -85,98 +77,87 @@ document.addEventListener('DOMContentLoaded', () => {
           modelsByBrand[c.brand].add(c.model);
         }
       }
-      if (c.fuel)       fuelSet.add(c.fuel);
+      if (c.fuel) fuelSet.add(c.fuel);
     });
 
-    // Helper to inject checkboxes
-    const inject = (id, items) => {
+    const inject = (id, arr) =>
       document.getElementById(id).innerHTML =
-        items.map(val => {
-          const safe = val.replace(/\s+/g,'-');
-          return `<label><input type="checkbox" value="${val}" id="${id}-${safe}"> ${val}</label>`;
-        }).join('');
-    };
+        Array.from(arr).sort()
+          .map(v => `<label><input type="checkbox" value="${v}" id="${id}-${v.replace(/\s+/g,'-')}"> ${v}</label>`)
+          .join('');
 
-    inject('filter-location', Array.from(locSet).sort());
-    inject('filter-body',     Array.from(bodySet).sort());
-    inject('filter-make',     Array.from(brandSet).sort());
-    inject('filter-fuel',     Array.from(fuelSet).sort());
+    inject('filter-location', locSet);
+    inject('filter-body',     bodySet);
+    inject('filter-make',     brandSet);
+    inject('filter-fuel',     fuelSet);
 
-    // Collapsible groups
-    document.querySelectorAll('.filter-header').forEach(h => {
-      h.addEventListener('click', () => {
-        h.parentElement.classList.toggle('collapsed');
-      });
-    });
+    document.querySelectorAll('.filter-header').forEach(h =>
+      h.addEventListener('click', () => h.parentElement.classList.toggle('collapsed'))
+    );
 
-    // Wiring filter events
     const doUpdate = () => {
       updateModelOptions(modelsByBrand);
       updateResults();
     };
     document.getElementById('filter-make').addEventListener('change', doUpdate);
     document.getElementById('filter-model').addEventListener('change', updateResults);
-    document.getElementById('filter-location').addEventListener('change', updateResults);
-    document.getElementById('filter-body').addEventListener('change', updateResults);
-    document.getElementById('filter-fuel').addEventListener('change', updateResults);
-    document.getElementById('category-vehicle').addEventListener('change', updateResults);
-    document.getElementById('category-motorcycle').addEventListener('change', updateResults);
-    document.getElementById('trans-auto').addEventListener('change', updateResults);
-    document.getElementById('trans-manual').addEventListener('change', updateResults);
-
+    ['filter-location','filter-body','filter-fuel'].forEach(id =>
+      document.getElementById(id).addEventListener('change', updateResults)
+    );
+    ['category-vehicle','category-motorcycle','trans-auto','trans-manual']
+      .forEach(id => document.getElementById(id).addEventListener('change', updateResults));
     ['price-min','price-max','year-min','year-max','odom-min','odom-max','engine-min','engine-max']
       .forEach(id => document.getElementById(id).addEventListener('input', updateResults));
+    document.getElementById('load-more').addEventListener('click', loadMore);
 
-    // Sort on header click
     document.querySelectorAll('#results-table thead th').forEach(th => {
       th.addEventListener('click', () => {
         const key = th.dataset.key;
         if (!key) return;
         if (currentSortKey === key) {
-          currentSortDir = (currentSortDir === 'asc' ? 'desc' : 'asc');
+          currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
         } else {
           currentSortKey = key;
           currentSortDir = 'asc';
         }
         document.querySelectorAll('#results-table thead th')
           .forEach(h => h.classList.remove('sorted-asc','sorted-desc'));
-        th.classList.add(currentSortDir==='asc'?'sorted-asc':'sorted-desc');
+        th.classList.add(currentSortDir === 'asc' ? 'sorted-asc' : 'sorted-desc');
         updateResults();
       });
     });
 
-    document.getElementById('load-more').addEventListener('click', loadMore);
+    // Delegate view-link clicks
+    document.body.addEventListener('click', e => {
+      if (e.target.matches('.view-link')) {
+        e.preventDefault();
+        openImageModal(e.target.dataset.url);
+      }
+    });
   }
 
-  // 3) Populate Model options based on chosen Make(s)
-  function updateModelOptions(modelsByBrand) {
-    const selMakes = Array.from(
-      document.querySelectorAll('#filter-make input:checked')
-    ).map(cb => cb.value);
+  // 3. Populate Model options based on Make selection
+  function updateModelOptions(mBB) {
+    const sel = Array.from(document.querySelectorAll('#filter-make input:checked'))
+                     .map(cb => cb.value);
     const cont = document.getElementById('filter-model');
     cont.innerHTML = '';
-    if (!selMakes.length) return;
-    const models = new Set();
-    selMakes.forEach(mk => (modelsByBrand[mk]||[]).forEach(md => models.add(md)));
-    cont.innerHTML = Array.from(models).sort().map(md => {
-      const safe = md.replace(/\s+/g,'-');
-      return `<label><input type="checkbox" value="${md}" id="filter-model-${safe}"> ${md}</label>`;
-    }).join('');
+    if (!sel.length) return;
+    const s = new Set();
+    sel.forEach(b => (mBB[b] || []).forEach(m => s.add(m)));
+    cont.innerHTML = Array.from(s).sort().map(m =>
+      `<label><input type="checkbox" value="${m}" id="filter-model-${m.replace(/\s+/g,'-')}"> ${m}</label>`
+    ).join('');
   }
 
-  // 4) Main filter + sort + paginate logic
+  // 4. Filter, sort, and render results
   function updateResults() {
-    // Read filters...
     const catV = document.getElementById('category-vehicle').checked;
     const catM = document.getElementById('category-motorcycle').checked;
-    const locs = new Set(Array.from(document.querySelectorAll('#filter-location input:checked'))
-                         .map(cb => cb.value));
-    const bods = new Set(Array.from(document.querySelectorAll('#filter-body input:checked'))
-                         .map(cb => cb.value));
-    const brs  = new Set(Array.from(document.querySelectorAll('#filter-make input:checked'))
-                         .map(cb => cb.value));
-    const mds  = new Set(Array.from(document.querySelectorAll('#filter-model input:checked'))
-                         .map(cb => cb.value));
+    const locs = new Set(Array.from(document.querySelectorAll('#filter-location input:checked')).map(cb => cb.value));
+    const bods = new Set(Array.from(document.querySelectorAll('#filter-body input:checked')).map(cb => cb.value));
+    const brs  = new Set(Array.from(document.querySelectorAll('#filter-make input:checked')).map(cb => cb.value));
+    const mds  = new Set(Array.from(document.querySelectorAll('#filter-model input:checked')).map(cb => cb.value));
     const fa   = document.getElementById('trans-auto').checked;
     const fm   = document.getElementById('trans-manual').checked;
     const pmin = parseFloat(document.getElementById('price-min').value) || -Infinity;
@@ -187,39 +168,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const omax = parseInt(document.getElementById('odom-max').value) || Infinity;
     const emin = parseFloat(document.getElementById('engine-min').value) || -Infinity;
     const emax = parseFloat(document.getElementById('engine-max').value) || Infinity;
-    const fus  = new Set(Array.from(document.querySelectorAll('#filter-fuel input:checked'))
-                         .map(cb => cb.value));
+    const fus  = new Set(Array.from(document.querySelectorAll('#filter-fuel input:checked')).map(cb => cb.value));
 
     currentData = allCars.filter(c => {
-      if (catV && !catM && c.category!=='Vehicle') return false;
-      if (catM && !catV && c.category!=='Motorcycle') return false;
-      if (c.price < pmin || c.price > pmax)            return false;
-      if (c.year  < ymin || c.year  > ymax)            return false;
-      if (locs.size && !locs.has(c.location))          return false;
-      if (bods.size && !bods.has(c.body))              return false;
-      if (brs.size  && !brs.has(c.brand))              return false;
-      if (mds.size  && !mds.has(c.model))              return false;
-      if (fa&&fm) { /* no filter */ }
+      if (catV && !catM && c.category !== 'Vehicle') return false;
+      if (catM && !catV && c.category !== 'Motorcycle') return false;
+      if (c.price < pmin || c.price > pmax) return false;
+      if (c.year  < ymin || c.year  > ymax) return false;
+      if (locs.size && !locs.has(c.location)) return false;
+      if (bods.size && !bods.has(c.body)) return false;
+      if (brs.size  && !brs.has(c.brand)) return false;
+      if (mds.size  && !mds.has(c.model)) return false;
+      if (fa && fm) { /* no filter */ }
       else if (fa)   { if (!/auto|cvt|direct/.test(c.transmission)) return false; }
-      else if (fm)   { if (!/man/.test(c.transmission))             return false; }
-      if (c.odometer < omin || c.odometer > omax)    return false;
-      if (c.engine   < emin || c.engine   > emax)    return false;
-      if (fus.size && !fus.has(c.fuel))              return false;
+      else if (fm)   { if (!/man/.test(c.transmission)) return false; }
+      if (c.odometer < omin || c.odometer > omax) return false;
+      if (c.engine   < emin || c.engine   > emax) return false;
+      if (fus.size && !fus.has(c.fuel)) return false;
       return true;
     });
 
-    // Sort
     if (currentSortKey) {
-      currentData.sort((a,b) => {
+      currentData.sort((a, b) => {
         let A = a[currentSortKey], B = b[currentSortKey];
-        if (typeof A==='string') { A=A.toLowerCase(); B=B.toLowerCase(); }
-        if (A<B) return currentSortDir==='asc' ? -1 : 1;
-        if (A>B) return currentSortDir==='asc' ? 1 : -1;
+        if (typeof A === 'string') { A = A.toLowerCase(); B = B.toLowerCase(); }
+        if (A < B) return currentSortDir === 'asc' ? -1 : 1;
+        if (A > B) return currentSortDir === 'asc' ? 1 : -1;
         return 0;
       });
     }
 
-    // Render first page
     const tbody = document.querySelector('#results-table tbody');
     tbody.innerHTML = '';
     displayCount = 0;
@@ -232,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadMore();
   }
 
-  // 5) Load next “page” onto the table
+  // 5. Paginate results
   function loadMore() {
     const tbody = document.querySelector('#results-table tbody');
     const start = displayCount;
@@ -251,12 +229,73 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${c.date}</td>
         <td>${c.price.toLocaleString()}</td>
         <td>${c.bids}</td>
-        <td><a href="${c.url}" target="_blank">View</a></td>
+        <td><a href="#" class="view-link" data-url="${c.url}">View</a></td>
       `;
       tbody.appendChild(row);
     }
     displayCount = end;
-    document.getElementById('load-more').style.display =
-      displayCount < currentData.length ? 'block' : 'none';
+    document.getElementById('load-more').style.display = displayCount < currentData.length ? 'block' : 'none';
+  }
+
+  // 6. Open modal & fetch images via Codetabs proxy
+  async function openImageModal(pageUrl) {
+    const proxy = 'https://api.codetabs.com/v1/proxy?quest=';
+    try {
+      const res  = await fetch(proxy + encodeURIComponent(pageUrl));
+      const html = await res.text();
+      const doc  = new DOMParser().parseFromString(html, 'text/html');
+      const slide = doc.querySelector('ul.slides');
+      if (!slide) {
+        alert('No image gallery found.');
+        return;
+      }
+      let urls = [];
+      slide.querySelectorAll('li a').forEach(a => {
+        const img = a.querySelector('img');
+        const src = img?.getAttribute('data-origin') || a.href;
+        if (src) urls.push(src);
+      });
+      urls = [...new Set(urls)];
+      const bigImgs = [];
+      await Promise.all(urls.map(u => new Promise(r => {
+        const i = new Image();
+        i.onload = () => {
+          if (i.naturalWidth >= 400 && i.naturalHeight >= 400) bigImgs.push(u);
+          r();
+        };
+        i.onerror = () => r();
+        i.src = u;
+      })));
+      showModalGallery(bigImgs);
+    } catch (err) {
+      console.error('Error loading gallery:', err);
+      alert('Could not load images (CORS proxy failed).');
+    }
+  }
+
+  let modalImages = [], currentIndex = 0;
+  function showModalGallery(images) {
+    if (!images.length) {
+      alert('No images ≥400×400 found.');
+      return;
+    }
+    modalImages = images;
+    currentIndex = 0;
+    const modal   = document.getElementById('image-modal');
+    const img     = document.getElementById('modal-img');
+    const prev    = document.getElementById('prev-btn');
+    const next    = document.getElementById('next-btn');
+    const closeB  = document.querySelector('.modal-close');
+    img.src = modalImages[0];
+    modal.style.display = 'flex';
+    prev.onclick = () => {
+      currentIndex = (currentIndex - 1 + modalImages.length) % modalImages.length;
+      img.src = modalImages[currentIndex];
+    };
+    next.onclick = () => {
+      currentIndex = (currentIndex + 1) % modalImages.length;
+      img.src = modalImages[currentIndex];
+    };
+    closeB.onclick = () => { modal.style.display = 'none'; };
   }
 });
