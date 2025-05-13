@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentSortDir = 'asc';
 
   // 1) Fetch newline-delimited JSON
-  fetch('JSON_data/sold_cars.json')
+  fetch('../JSON_data/sold_cars.json')
     .then(res => res.text())
     .then(text => {
       text.trim().split('\n').forEach(line => {
